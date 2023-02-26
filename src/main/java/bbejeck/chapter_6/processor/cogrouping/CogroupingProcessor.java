@@ -18,7 +18,7 @@ import static org.apache.kafka.streams.processor.PunctuationType.STREAM_TIME;
  * Date: 8/12/17
  * Time: 10:54 AM
  */
-public class CogroupingProcessor extends AbstractProcessor<String, Tuple<ClickEvent,StockTransaction>> {
+public class    CogroupingProcessor extends AbstractProcessor<String, Tuple<ClickEvent,StockTransaction>> {
 
     private KeyValueStore<String, Tuple<List<ClickEvent>,List<StockTransaction>>> tupleStore;
     public static final  String TUPLE_STORE_NAME = "tupleCoGroupStore";

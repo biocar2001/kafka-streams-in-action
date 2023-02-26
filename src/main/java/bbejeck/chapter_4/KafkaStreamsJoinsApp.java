@@ -90,7 +90,7 @@ public class KafkaStreamsJoinsApp {
 
         // used only to produce data for this application, not typical usage
         MockDataProducer.producePurchaseData();
-        
+        LOG.info(builder.build().describe().toString());
         LOG.info("Starting Join Examples");
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfig);
         kafkaStreams.start();

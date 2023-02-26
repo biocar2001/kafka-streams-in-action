@@ -104,6 +104,7 @@ public class CountingWindowingAndKtableJoinExample {
         MockDataProducer.produceStockTransactions(2, 5, 3, false);
 
         LOG.info("Starting CountingWindowing and KTableJoins Example");
+        LOG.info(builder.build().describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(65000);

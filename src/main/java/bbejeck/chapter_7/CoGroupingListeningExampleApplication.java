@@ -93,7 +93,7 @@ public class CoGroupingListeningExampleApplication {
         LOG.info("Co-Grouping App Started");
         kafkaStreams.cleanUp();
         kafkaStreams.start();
-
+        System.out.println(topology.describe().toString());
         Thread.sleep(70000);
         LOG.info("Shutting down the Co-Grouping metrics App now");
         kafkaStreams.close();

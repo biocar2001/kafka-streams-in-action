@@ -59,10 +59,12 @@ public class ZMartKafkaStreamsAdvancedReqsApp {
 
 
         // previous requirements
-        KStream<String,Purchase> purchaseKStream = builder.stream( "transactions", Consumed.with(stringSerde, purchaseSerde))
+        KStream<String,Purchase> purchaseKStream =
+                builder.stream( "transactions", Consumed.with(stringSerde, purchaseSerde))
                 .mapValues(p -> Purchase.builder(p).maskCreditCard().build());
 
-        KStream<String, PurchasePattern> patternKStream = purchaseKStream.mapValues(purchase -> PurchasePattern.builder(purchase).build());
+        KStream<String, PurchasePattern> patternKStream =
+                purchaseKStream.mapValues(purchase -> PurchasePattern.builder(purchase).build());
 
         patternKStream.print( Printed.<String, PurchasePattern>toSysOut().withLabel("patterns"));
         patternKStream.to("patterns", Produced.with(stringSerde,purchasePatternSerde));
@@ -118,8 +120,10 @@ public class ZMartKafkaStreamsAdvancedReqsApp {
         MockDataProducer.producePurchaseData();
         
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(),streamsConfig);
+        LOG.info(builder.build().describe().toString());
         LOG.info("ZMart Advanced Requirements Kafka Streams Application Started");
         kafkaStreams.start();
+
         Thread.sleep(65000);
         LOG.info("Shutting down the Kafka Streams Application now");
         kafkaStreams.close();

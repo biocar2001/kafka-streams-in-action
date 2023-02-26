@@ -56,6 +56,8 @@ public class ZMartProcessorApp {
 
         KafkaStreams kafkaStreams = new KafkaStreams(topology, streamsConfig);
         System.out.println("ZMart Processor App Started");
+        System.out.println(topology.describe().toString());
+
         kafkaStreams.start();
         Thread.sleep(35000);
         System.out.println("Shutting down the ZMart Processor App now");

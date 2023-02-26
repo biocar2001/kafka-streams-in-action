@@ -74,14 +74,18 @@ public class ZMartKafkaStreamsAddStateApp {
         RewardsStreamPartitioner streamPartitioner = new RewardsStreamPartitioner();
 
         KeyValueBytesStoreSupplier storeSupplier = Stores.inMemoryKeyValueStore(rewardsStateStoreName);
-        StoreBuilder<KeyValueStore<String, Integer>> storeBuilder = Stores.keyValueStoreBuilder(storeSupplier, Serdes.String(), Serdes.Integer());
+        StoreBuilder<KeyValueStore<String, Integer>> storeBuilder =
+                Stores.keyValueStoreBuilder(storeSupplier, Serdes.String(), Serdes.Integer());
 
         builder.addStateStore(storeBuilder);
 
-        KStream<String, Purchase> transByCustomerStream = purchaseKStream.through( "customer_transactions", Produced.with(stringSerde, purchaseSerde, streamPartitioner));
+        KStream<String, Purchase> transByCustomerStream =
+                purchaseKStream.through( "customer_transactions",
+                        Produced.with(stringSerde, purchaseSerde, streamPartitioner));
 
 
-        KStream<String, RewardAccumulator> statefulRewardAccumulator = transByCustomerStream.transformValues(() ->  new PurchaseRewardTransformer(rewardsStateStoreName),
+        KStream<String, RewardAccumulator> statefulRewardAccumulator =
+                transByCustomerStream.transformValues(() ->  new PurchaseRewardTransformer(rewardsStateStoreName),
                 rewardsStateStoreName);
 
         statefulRewardAccumulator.print(Printed.<String, RewardAccumulator>toSysOut().withLabel("rewards"));
@@ -92,7 +96,7 @@ public class ZMartKafkaStreamsAddStateApp {
         // used only to produce data for this application, not typical usage
         MockDataProducer.producePurchaseData();
 
-        
+        LOG.info(builder.build().describe().toString());
         LOG.info("Starting Adding State Example");
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(),streamsConfig);
         LOG.info("ZMart Adding State Application Started");

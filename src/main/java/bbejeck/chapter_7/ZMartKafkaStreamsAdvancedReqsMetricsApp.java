@@ -131,6 +131,7 @@ import java.util.concurrent.CountDownLatch;
 
         kafkaStreams.setStateListener(stateListener);
         LOG.info("ZMart Advanced Requirements Metrics Application Started");
+        System.out.println(topology.describe().toString());
         kafkaStreams.cleanUp();
         CountDownLatch stopSignal = new CountDownLatch(1);
 

@@ -62,19 +62,24 @@ public class CoGroupingApplication {
 
         topology.addSource("Txn-Source", stringDeserializer, stockTransactionDeserializer, "stock-transactions")
                 .addSource("Events-Source", stringDeserializer, clickEventDeserializer, "events")
-                .addProcessor("Txn-Processor", StockTransactionProcessor::new, "Txn-Source")
-                .addProcessor("Events-Processor", ClickEventProcessor::new, "Events-Source")
-                .addProcessor("CoGrouping-Processor", CogroupingProcessor::new, "Txn-Processor", "Events-Processor")
+                .addProcessor("Txn-Processor",
+                        StockTransactionProcessor::new, "Txn-Source")
+                .addProcessor("Events-Processor",
+                        ClickEventProcessor::new, "Events-Source")
+                .addProcessor("CoGrouping-Processor",
+                        CogroupingProcessor::new, "Txn-Processor", "Events-Processor")
                 .addStateStore(storeBuilder, "CoGrouping-Processor")
                 .addSink("Tuple-Sink", "cogrouped-results", stringSerializer, tupleSerializer, "CoGrouping-Processor");
 
-        topology.addProcessor("Print", new KStreamPrinter("Co-Grouping"), "CoGrouping-Processor");
+        topology.addProcessor("Print", new KStreamPrinter("Co-Grouping"),
+                "CoGrouping-Processor");
 
 
         MockDataProducer.produceStockTransactionsAndDayTradingClickEvents(50, 100, 100, StockTransaction::getSymbol);
 
         KafkaStreams kafkaStreams = new KafkaStreams(topology, streamsConfig);
         System.out.println("Co-Grouping App Started");
+        System.out.println(topology.describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(70000);

@@ -59,6 +59,8 @@ public class StockPerformanceStreamsAndProcessorMultipleValuesApplication {
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfig);
         MockDataProducer.produceStockTransactionsWithKeyFunction(50, 50, 25, StockTransaction::getSymbol);
         System.out.println("Stock Analysis KStream/Process API App Started");
+        System.out.println(builder.build().describe().toString());
+
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(70000);

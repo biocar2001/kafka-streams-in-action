@@ -51,7 +51,8 @@ public class GlobalKTableExample {
         StreamsBuilder builder = new StreamsBuilder();
         long twentySeconds = 1000 * 20;
 
-        KeyValueMapper<Windowed<TransactionSummary>, Long, KeyValue<String, TransactionSummary>> transactionMapper = (window, count) -> {
+        KeyValueMapper<Windowed<TransactionSummary>, Long, KeyValue<String, TransactionSummary>> transactionMapper =
+                (window, count) -> {
             TransactionSummary transactionSummary = window.key();
             String newKey = transactionSummary.getIndustry();
             transactionSummary.setSummaryCount(count);
@@ -59,7 +60,8 @@ public class GlobalKTableExample {
         };
 
         KStream<String, TransactionSummary> countStream =
-                builder.stream( STOCK_TRANSACTIONS_TOPIC, Consumed.with(stringSerde, transactionSerde).withOffsetResetPolicy(LATEST))
+                builder.stream( STOCK_TRANSACTIONS_TOPIC, Consumed.with(stringSerde, transactionSerde)
+                                .withOffsetResetPolicy(LATEST))
                         .groupBy((noKey, transaction) -> TransactionSummary.from(transaction), Serialized.with(transactionSummarySerde, transactionSerde))
                         .windowedBy(SessionWindows.with(twentySeconds)).count()
                         .toStream().map(transactionMapper);
@@ -91,6 +93,7 @@ public class GlobalKTableExample {
         LOG.info("Starting GlobalKTable Example");
         kafkaStreams.cleanUp();
         kafkaStreams.start();
+        LOG.info(builder.build().describe().toString());
         Thread.sleep(65000);
         LOG.info("Shutting down the GlobalKTable Example Application now");
         kafkaStreams.close();

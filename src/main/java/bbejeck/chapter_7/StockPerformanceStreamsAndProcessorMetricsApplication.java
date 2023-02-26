@@ -47,7 +47,8 @@ public class StockPerformanceStreamsAndProcessorMetricsApplication {
         double differentialThreshold = 0.05;
 
         KeyValueBytesStoreSupplier storeSupplier = Stores.lruMap(stocksStateStore, 100);
-        StoreBuilder<KeyValueStore<String, StockPerformance>> storeBuilder = Stores.keyValueStoreBuilder(storeSupplier, Serdes.String(), stockPerformanceSerde);
+        StoreBuilder<KeyValueStore<String, StockPerformance>> storeBuilder
+                = Stores.keyValueStoreBuilder(storeSupplier, Serdes.String(), stockPerformanceSerde);
 
         builder.addStateStore(storeBuilder);
 
@@ -60,6 +61,7 @@ public class StockPerformanceStreamsAndProcessorMetricsApplication {
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfig);
         MockDataProducer.produceStockTransactionsWithKeyFunction(50, 50, 25, StockTransaction::getSymbol);
         LOG.info("Stock Analysis KStream/Process API Metrics App Started");
+        System.out.println(builder.build().describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
 

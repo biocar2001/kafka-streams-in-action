@@ -45,6 +45,7 @@ public class KStreamVsKTableExample {
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfig);
         LOG.info("KTable vs KStream output started");
+        LOG.info(builder.build().describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(15000);

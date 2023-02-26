@@ -71,6 +71,7 @@ public class PopsHopsApplication {
         KafkaStreams kafkaStreams = new KafkaStreams(toplogy, streamsConfig);
         MockDataProducer.produceBeerPurchases(5);
         System.out.println("Starting Pops-Hops Application now");
+        System.out.println(toplogy.describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(70000);

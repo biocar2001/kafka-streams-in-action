@@ -47,7 +47,9 @@ public class StockCountsStreamsConnectIntegrationApplication {
 
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfig);
+        System.out.print(builder.build().describe().toString());
         CountDownLatch doneSignal = new CountDownLatch(1);
+
 
         Runtime.getRuntime().addShutdownHook(new Thread(()-> {
             doneSignal.countDown();
@@ -57,6 +59,7 @@ public class StockCountsStreamsConnectIntegrationApplication {
 
         
         LOG.info("Stock Analysis KStream Connect App Started");
+
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         doneSignal.await();

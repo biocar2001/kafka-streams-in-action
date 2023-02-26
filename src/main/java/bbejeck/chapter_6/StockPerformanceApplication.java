@@ -57,6 +57,7 @@ public class StockPerformanceApplication {
         KafkaStreams kafkaStreams = new KafkaStreams(topology, streamsConfig);
         MockDataProducer.produceStockTransactionsWithKeyFunction(50,50, 25, StockTransaction::getSymbol);
         System.out.println("Stock Analysis App Started");
+        System.out.println(topology.describe().toString());
         kafkaStreams.cleanUp();
         kafkaStreams.start();
         Thread.sleep(70000);
